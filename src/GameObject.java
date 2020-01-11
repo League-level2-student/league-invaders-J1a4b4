@@ -19,18 +19,9 @@ public class GameObject {
 	}
 	
 	void update() {
-		if(up) {
-			y = y - 10;
-		}else if(down) {
-			y = y + 10;
-		}else if(left) {
-			x = x - 10;
-		}else if(right) {
-			x = x + 10;
-		}
-	}
+		
 	
 	void draw(Graphics g) {
-		g.fillRect(x, y, width, height);
+		
 	}
 }
