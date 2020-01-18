@@ -11,16 +11,16 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Timer timer;
-	 GameObject objectI;
+	 Ship ship = new Ship(250, 700, 50, 50);
 	 final int MENU_STATE = 0;
 	 final int GAME_STATE = 1;
 	 final int END_STATE = 2;
 	 int currentState = MENU_STATE;
 	 Font titleFont;
+	 ObjectManager manager = new ObjectManager(ship);
 
 	GamePanel(){
 		timer = new Timer(1000/60, this);
-		objectI = new GameObject(10, 10, 100, 100);
 		titleFont = new Font("Arial", Font.PLAIN, 48);
 	}
 	
@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	void updateGameState() {
-		
+		ship.update();
+		manager.update();
 	}
 	
 	void updateEndState() {
@@ -51,6 +52,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
+		manager.draw(g);
 	}
 	
 	void drawEndState(Graphics g) {
@@ -63,7 +65,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		objectI.update();
+		ship.update();
 		repaint();
 		 if(currentState == MENU_STATE){
              updateMenuState();
@@ -76,7 +78,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	 @Override
 	 	public void paintComponent(Graphics g){
-	        objectI.draw(g);
 	        if(currentState == MENU_STATE){
                 drawMenuState(g);
 	        }else if(currentState == GAME_STATE){
@@ -94,29 +95,24 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if(currentState == MENU_STATE) {
-				currentState = GAME_STATE;
-			}else if (currentState == GAME_STATE) {
-				currentState = END_STATE;
-			}else if (currentState == END_STATE) {
+			if(currentState == END_STATE) {
 				currentState = MENU_STATE;
+			}else {
+				currentState++;
 			}
 		}else if(e.getKeyCode() == KeyEvent.VK_UP) {
-			objectI.up = true;
+			ship.up();
 		}else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			objectI.down = true;
+			ship.down();
 		}else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			objectI.left = true;
+			ship.left();
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			objectI.right = true;
+			ship.right();
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		objectI.up = false;
-		objectI.down = false;
-		objectI.left = false;
-		objectI.right = false;
+		
 	}
 }

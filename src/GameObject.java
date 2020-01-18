@@ -6,11 +6,9 @@ public class GameObject {
 	int y;
 	int width;
 	int height;
-	boolean up = false;
-	boolean down = false;
-	boolean left = false;
-	boolean right = false;
-	
+	int speed = 0;
+	boolean isActive = true;
+
 	GameObject(int x, int y, int width, int height){
 		this.x = x;
 		this.y = y;
@@ -20,6 +18,7 @@ public class GameObject {
 	
 	void update() {
 		
+	}
 	
 	void draw(Graphics g) {
 		
