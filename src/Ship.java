@@ -1,20 +1,30 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 
 public class Ship extends GameObject {
 
+	public static BufferedImage image;
+	public static boolean needImage = true;
+	public static boolean gotImage = false;
+	
 	Ship(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		speed = 10;
+		if (needImage) {
+		    loadImage ("ship.png");
+		}
 	}
 
 	void draw(Graphics g) {
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(x + width / 4, y, width / 2, height);
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(x, y + height / 2, width, height / 2);
-		g.setColor(Color.BLUE);
-		g.fillRect(x + width * 2/5, y + height / 6, width / 5, height / 3);
+		if (gotImage) {
+			g.drawImage(image, x, y, width, height, null);
+		} else {
+			g.setColor(Color.BLUE);
+			g.fillRect(x, y, width, height);
+		}
 	}
 	
 	void up() {
@@ -39,5 +49,19 @@ public class Ship extends GameObject {
 		if(x < LeagueInvaders.WIDTH - width) {
 			x = x + speed;
 		}
+	}
+	void loadImage(String imageFile) {
+	    if (needImage) {
+	        try {
+	            image = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		    gotImage = true;
+	        } catch (Exception e) {
+	            
+	        }
+	        needImage = false;
+	    }
+	}
+	public Projectile getProjectile() {
+		return new Projectile(x + width / 2, y, 10, 10);
 	}
 }

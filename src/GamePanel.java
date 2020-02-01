@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Timer timer;
+	Timer alienSpawn;
 	 Ship ship = new Ship(250, 700, 50, 50);
 	 final int MENU_STATE = 0;
 	 final int GAME_STATE = 1;
@@ -26,6 +27,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	void startGame() {
 		timer.start();
+		alienSpawn = new Timer(1000, manager);
+		alienSpawn.start();
 	}
 	
 	void updateMenuState() {
@@ -95,19 +98,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if(currentState == END_STATE) {
+			if(currentState == MENU_STATE) {
+				currentState = GAME_STATE;
+				startGame();
+			}else if (currentState == GAME_STATE) {
+				currentState = END_STATE;
+				alienSpawn.stop();
+			}else if (currentState == END_STATE) {
 				currentState = MENU_STATE;
-			}else {
-				currentState++;
 			}
-		}else if(e.getKeyCode() == KeyEvent.VK_UP) {
-			ship.up();
-		}else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			ship.down();
-		}else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			ship.left();
-		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			ship.right();
+		}else if (currentState == GAME_STATE) {
+			if(e.getKeyCode() == KeyEvent.VK_UP) {
+				ship.up();
+			}else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+				ship.down();
+			}else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+				ship.left();
+			}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				ship.right();
+			}else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				manager.addProjectile(ship.getProjectile());
+			}
 		}
 	}
 
