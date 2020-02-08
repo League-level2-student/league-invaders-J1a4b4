@@ -14,17 +14,18 @@ public class Projectile extends GameObject {
 		super(x, y, width, height);
 		speed = 10;
 		if (needImage) {
-		    loadImage ("projectile.png");
+		    loadImage ("missile.png");
 		}
 	}
 
 	void update() {
 		y = y - speed;
+		super.update();
 	}
 	
 	void draw(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, x, y, width, height, null);
+			g.drawImage(image, x, y, width, width * 9/2, null);
 		} else {
 			g.setColor(Color.RED);
 			g.fillRect(x, y, width, height);
